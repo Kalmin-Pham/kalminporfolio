@@ -37,6 +37,23 @@
 .about-layout .about-copy{max-width:none;margin:0;padding:34px 36px 24px}
 .about-layout .about-copy p:last-child{margin-bottom:0}
 .section-heading{font-size:clamp(1.9rem,3.4vw,3.15rem)}
+#projects .project-carousel{display:flex;gap:24px;overflow-x:auto;padding:12px 4px 40px;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain;cursor:grab}
+#projects .project-carousel::-webkit-scrollbar{display:none}
+#projects .project-carousel.is-dragging{cursor:grabbing;scroll-snap-type:none;user-select:none}
+#projects{background-color:transparent}
+#projects .section-subtitle{margin-bottom:20px}
+#projects .project-card{box-shadow:0 12px 32px rgba(15,76,129,.07)}
+#projects .project-card:hover{box-shadow:0 18px 40px rgba(15,76,129,.12)}
+#projects .project-carousel-wrap{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px}
+#projects .project-carousel{position:relative;z-index:0}
+#projects .project-carousel-arrow{display:grid;width:44px;height:44px;place-items:center;padding:0;border:1px solid rgba(15,108,189,.18);border-radius:50%;background:rgba(255,255,255,.94);color:var(--accent-strong);box-shadow:0 8px 22px rgba(15,76,129,.16);cursor:pointer;transition:background .2s ease,color .2s ease,opacity .2s ease}
+#projects .project-carousel-arrow:hover:not(:disabled){background:var(--accent-strong);color:#fff}
+#projects .project-carousel-arrow:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+#projects .project-carousel-arrow:disabled{opacity:.45;cursor:default}
+#projects .project-carousel-arrow svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#projects .project-carousel:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+#projects .project-carousel .project-card{flex:0 0 clamp(280px,42vw,460px);scroll-snap-align:start}
+@media(max-width:560px){#projects .project-carousel-wrap{grid-template-columns:38px minmax(0,1fr) 38px;gap:4px}#projects .project-carousel-arrow{width:38px;height:38px}}
 @media(max-width:820px){.about-layout{grid-template-columns:minmax(210px,.78fr) minmax(0,1.35fr);gap:18px}.profile-card{padding:28px 20px}.profile-avatar{width:148px}.about-layout .about-copy{padding:28px 25px 22px}}
 @media(max-width:560px){.about-layout{grid-template-columns:1fr;gap:18px;margin-top:30px}.profile-card{min-height:0;padding:27px 22px}.profile-avatar{width:142px}.profile-actions{max-width:340px}.about-layout .about-copy{padding:24px 22px 16px}.about-layout .about-copy h3{font-size:1.7rem}}
 </style>
@@ -87,6 +104,13 @@
 @media (prefers-reduced-motion: reduce) {
   .project-dialog[open], .project-dialog::backdrop { animation: none; }
 }
+.section { padding-block: 72px; }
+@media (max-width: 820px) {
+  .section { padding-block: 60px; }
+}
+@media (max-width: 560px) {
+  .section { padding-block: 48px; }
+}
 </style>
 </head>
 <body>
@@ -101,10 +125,14 @@
       <article class="expertise-item"><img class="expertise-icon--large" src="https://www.mychoicesoftware.com/cdn/shop/files/CopilotStudiologoupdated.jpg?v=1739477430&amp;width=964" alt="Copilot Studio"><h3>Copilot Studio</h3><p>Agent creation, conversational experiences, and process orchestration</p></article>
       <article class="expertise-item"><img class="expertise-icon--large" src="https://www.topclip.ai/final-icon.png" alt="Dynamics 365"><h3>Dynamics 365</h3><p>CRM, sales workflows, customer engagement, and business apps</p></article>
     </div></div></section>
-    <section class="section" id="projects"><div class="container"><h2 class="section-heading">Sample Projects</h2><p class="section-subtitle">Showcasing innovative solutions that have transformed businesses</p><div class="card-grid">
+    <section class="section" id="projects"><div class="container"><h2 class="section-heading">Sample Projects</h2><p class="section-subtitle">Showcasing innovative solutions that have transformed businesses. Drag or hold Shift while scrolling to browse.</p><div class="project-carousel-wrap">
+      <button class="project-carousel-arrow project-carousel-arrow--previous" type="button" aria-label="Scroll to previous projects" aria-controls="project-carousel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+      <div class="card-grid project-carousel" id="project-carousel" role="region" aria-label="Sample projects carousel" tabindex="0">
       <article class="project-card"><img class="project-image" src="https://qinisomtshali.github.io/qiniso-portfolio/Images/onboarding.png" alt="Employee Onboarding Screenshot"><div class="project-body"><h3>Employee Onboarding System</h3><p>Comprehensive Power Apps solution with automated workflows for new hire processes.</p><div class="tags"><span class="tag">Power Apps</span><span class="tag">SharePoint</span><span class="tag">Power Automate</span><span class="tag">Teams</span></div></div></article>
       <article class="project-card"><img class="project-image" src="https://qinisomtshali.github.io/qiniso-portfolio/Images/leave-request.png" alt="Leave Request App Screenshot"><div class="project-body"><h3>Leave Request Management System</h3><p>Manage employee leave requests, approvals, balances, and compliance.</p><div class="tags"><span class="tag">Power Apps</span><span class="tag">SharePoint</span><span class="tag">Power Automate</span><span class="tag">Teams</span><span class="tag">Outlook</span></div></div></article>
       <article class="project-card"><img class="project-image" src="https://qinisomtshali.github.io/qiniso-portfolio/Images/qa-flow.png" alt="QA Flow Screenshot"><div class="project-body"><h3>QA Payment File Approval Flow</h3><p>Validates and tracks payment file submissions with audit-friendly automation.</p><div class="tags"><span class="tag">SharePoint</span><span class="tag">Power Automate</span><span class="tag">Teams</span><span class="tag">Outlook</span></div></div></article>
+      </div>
+      <button class="project-carousel-arrow project-carousel-arrow--next" type="button" aria-label="Scroll to next projects" aria-controls="project-carousel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
     </div></div></section>
     <section class="section" id="certifications" style="display:none"><div class="container"><h2 class="section-heading">Certifications</h2><p class="section-subtitle">Validated expertise in Microsoft Power Platform and related technologies</p><div class="cert-grid">
       <article class="cert-card"><div class="cert-top"><img src="https://qinisomtshali.github.io/qiniso-portfolio/Images/certifications/pl400.png" alt="PL-400 Badge"><h3>Microsoft Certified: Power Platform Developer Associate</h3></div><p>PL-400 - Demonstrates expertise in designing, developing, and implementing Power Platform solutions.</p><a class="verify" href="https://learn.microsoft.com/api/credentials/share/en-us/QINISOMtshali-2486/40EC2E8886132498?sharingId=BA211BD8093A5B2" target="_blank" rel="noreferrer"><img src="https://qinisomtshali.github.io/qiniso-portfolio/Images/logos/verify.png" alt="">Verify</a></article>
@@ -204,6 +232,82 @@ if (
       openProjectDialog(card);
     });
   });
+
+  const projectCarousel = document.querySelector('.project-carousel');
+  if (projectCarousel) {
+    const previousArrow = document.querySelector('.project-carousel-arrow--previous');
+    const nextArrow = document.querySelector('.project-carousel-arrow--next');
+    let dragStart = null;
+    let dragged = false;
+    let suppressClick = false;
+    let suppressClickTimer;
+
+    projectCarousel.addEventListener('pointerdown', (event) => {
+      if (event.pointerType !== 'mouse' || event.button !== 0 || projectCarousel.scrollWidth <= projectCarousel.clientWidth) return;
+      dragStart = { pointerId: event.pointerId, x: event.clientX, scrollLeft: projectCarousel.scrollLeft };
+      dragged = false;
+    });
+
+    projectCarousel.addEventListener('pointermove', (event) => {
+      if (!dragStart || event.pointerId !== dragStart.pointerId) return;
+      const distance = event.clientX - dragStart.x;
+      if (!dragged && Math.abs(distance) < 5) return;
+      dragged = true;
+      projectCarousel.classList.add('is-dragging');
+      if (!projectCarousel.hasPointerCapture(event.pointerId)) {
+        projectCarousel.setPointerCapture(event.pointerId);
+      }
+      projectCarousel.scrollLeft = dragStart.scrollLeft - distance;
+      event.preventDefault();
+    });
+
+    const finishDrag = (event) => {
+      if (!dragStart || event.pointerId !== dragStart.pointerId) return;
+      dragStart = null;
+      projectCarousel.classList.remove('is-dragging');
+      if (!dragged) return;
+      suppressClick = true;
+      window.clearTimeout(suppressClickTimer);
+      suppressClickTimer = window.setTimeout(() => { suppressClick = false; }, 400);
+    };
+
+    projectCarousel.addEventListener('pointerup', finishDrag);
+    projectCarousel.addEventListener('pointercancel', finishDrag);
+    projectCarousel.addEventListener('click', (event) => {
+      if (!suppressClick || !event.target.closest('.project-card')) return;
+      suppressClick = false;
+      window.clearTimeout(suppressClickTimer);
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }, true);
+    projectCarousel.addEventListener('wheel', (event) => {
+      if (!event.shiftKey && Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+      const delta = event.deltaY || (event.shiftKey ? event.deltaX : 0);
+      if (delta === 0) return;
+      event.preventDefault();
+      projectCarousel.scrollLeft += delta;
+    }, { passive: false, capture: true });
+    projectCarousel.addEventListener('keydown', (event) => {
+      if (event.target !== projectCarousel || (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')) return;
+      event.preventDefault();
+      projectCarousel.scrollBy({ left: event.key === 'ArrowRight' ? 300 : -300, behavior: 'smooth' });
+    });
+
+    const updateCarouselArrows = () => {
+      if (previousArrow) previousArrow.disabled = projectCarousel.scrollLeft <= 8;
+      if (nextArrow) nextArrow.disabled = projectCarousel.scrollLeft + projectCarousel.clientWidth >= projectCarousel.scrollWidth - 8;
+    };
+
+    projectCarousel.addEventListener('scroll', updateCarouselArrows, { passive: true });
+    window.addEventListener('resize', updateCarouselArrows);
+    previousArrow?.addEventListener('click', () => {
+      projectCarousel.scrollBy({ left: -projectCarousel.clientWidth * 0.8, behavior: 'smooth' });
+    });
+    nextArrow?.addEventListener('click', () => {
+      projectCarousel.scrollBy({ left: projectCarousel.clientWidth * 0.8, behavior: 'smooth' });
+    });
+    updateCarouselArrows();
+  }
 
   projectDialog.addEventListener('cancel', (event) => {
     event.preventDefault();
