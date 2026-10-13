@@ -40,6 +40,54 @@
 @media(max-width:820px){.about-layout{grid-template-columns:minmax(210px,.78fr) minmax(0,1.35fr);gap:18px}.profile-card{padding:28px 20px}.profile-avatar{width:148px}.about-layout .about-copy{padding:28px 25px 22px}}
 @media(max-width:560px){.about-layout{grid-template-columns:1fr;gap:18px;margin-top:30px}.profile-card{min-height:0;padding:27px 22px}.profile-avatar{width:142px}.profile-actions{max-width:340px}.about-layout .about-copy{padding:24px 22px 16px}.about-layout .about-copy h3{font-size:1.7rem}}
 </style>
+<style>
+.project-card { cursor: pointer; }
+.project-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+.project-dialog {
+  width: min(760px, calc(100% - 32px));
+  max-width: none;
+  max-height: 90vh;
+  max-height: 90dvh;
+  padding: 0;
+  overflow-y: auto;
+  border: 1px solid var(--line-strong);
+  border-radius: 24px;
+  background: var(--surface-strong);
+  color: var(--text);
+  box-shadow: 0 28px 90px rgba(15, 23, 42, .28);
+  overscroll-behavior: contain;
+}
+.project-dialog[open] { animation: project-dialog-enter .24s ease-out both; }
+.project-dialog::backdrop { background: rgba(15, 23, 42, .58); backdrop-filter: blur(6px); animation: project-backdrop-enter .24s ease-out both; }
+.project-dialog-content { position: relative; }
+.project-dialog-image { width: 100%; max-height: 390px; object-fit: cover; background: var(--surface-soft); }
+.project-dialog-body { padding: 30px clamp(22px, 5vw, 42px) 38px; }
+.project-dialog-eyebrow { margin-bottom: 10px; color: var(--accent); font-size: .78rem; font-weight: 800; letter-spacing: .12em; }
+.project-dialog-body h2 { margin: 0 0 14px; color: var(--accent-strong); font-size: clamp(1.8rem, 5vw, 2.5rem); line-height: 1.15; letter-spacing: -.04em; }
+.project-dialog-description { margin: 0; color: var(--muted-strong); font-size: 1.05rem; }
+.project-dialog-tags { margin-top: 22px; }
+.project-dialog-demo { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--line); }
+.project-dialog-demo-button { min-height: 46px; padding: 0 22px; border: 0; border-radius: 999px; background: linear-gradient(135deg, #0f6cbd, #005a9e); color: #fff; font-weight: 700; cursor: pointer; box-shadow: 0 12px 24px rgba(15, 108, 189, .18); transition: transform .2s ease, box-shadow .2s ease; }
+.project-dialog-demo-button:hover { transform: translateY(-2px); box-shadow: 0 16px 28px rgba(15, 108, 189, .24); }
+.project-dialog-demo-button:focus-visible, .project-dialog-demo-message a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.project-dialog-demo-message { flex-basis: 100%; margin: 0; color: var(--muted-strong); font-size: .95rem; }
+.project-dialog-demo-message a { color: var(--accent-strong); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 600px) {
+  .project-dialog { width: calc(100% - 24px); border-radius: 18px; }
+  .project-dialog-image { max-height: 250px; }
+}
+@keyframes project-dialog-enter {
+  from { opacity: 0; transform: translateY(14px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes project-backdrop-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-dialog[open], .project-dialog::backdrop { animation: none; }
+}
+</style>
 </head>
 <body>
   <header class="site-header"><nav class="nav-wrap" aria-label="Main navigation"><a class="brand" href="#about">Kalmin Pham's Portfolio</a><button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-links"><span></span><span></span><span></span></button><ul class="nav-links" id="nav-links"><li><a href="#about">About</a></li><li><a href="#expertise">Expertise</a></li><li><a href="#projects">Projects</a></li><li><a href="#certifications">Certifications</a></li><li><a href="#contact">Contact</a></li></ul></nav></header>
@@ -72,6 +120,22 @@
   </main>
 
   <button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+
+  <dialog class="project-dialog" aria-labelledby="project-dialog-title" aria-describedby="project-dialog-description">
+    <div class="project-dialog-content">
+      <img class="project-dialog-image" alt="">
+      <div class="project-dialog-body">
+        <p class="project-dialog-eyebrow">PROJECT OVERVIEW</p>
+        <h2 id="project-dialog-title"></h2>
+        <p class="project-dialog-description" id="project-dialog-description"></p>
+        <div class="tags project-dialog-tags" aria-label="Technologies used"></div>
+        <div class="project-dialog-demo">
+          <button class="project-dialog-demo-button" type="button">Start live demo</button>
+          <p class="project-dialog-demo-message" role="status" hidden>The live demo for this project is currently not available. <a href="#contact">Book a demo</a> to proceed further.</p>
+        </div>
+      </div>
+    </div>
+  </dialog>
   
 <script>
 const menuToggle = document.querySelector('.menu-toggle');
@@ -90,6 +154,78 @@ if (menuToggle && navLinks) {
     navLinks.classList.remove('is-open');
     menuToggle.setAttribute('aria-expanded', 'false');
     menuToggle.setAttribute('aria-label', 'Open navigation');
+  });
+}
+
+const projectDialog = document.querySelector('.project-dialog');
+const projectDialogImage = projectDialog?.querySelector('.project-dialog-image');
+const projectDialogTitle = projectDialog?.querySelector('#project-dialog-title');
+const projectDialogDescription = projectDialog?.querySelector('#project-dialog-description');
+const projectDialogTags = projectDialog?.querySelector('.project-dialog-tags');
+const projectDialogDemoMessage = projectDialog?.querySelector('.project-dialog-demo-message');
+const projectDialogDemoButton = projectDialog?.querySelector('.project-dialog-demo-button');
+let activeProjectCard = null;
+
+if (
+  projectDialog instanceof HTMLDialogElement &&
+  projectDialogImage &&
+  projectDialogTitle &&
+  projectDialogDescription &&
+  projectDialogTags &&
+  projectDialogDemoMessage &&
+  projectDialogDemoButton
+) {
+  const openProjectDialog = (card) => {
+    const image = card.querySelector('.project-image');
+    const title = card.querySelector('.project-body h3');
+    const description = card.querySelector('.project-body p');
+    const tags = card.querySelector('.project-body .tags');
+
+    if (!image || !title || !description || !tags) return;
+
+    activeProjectCard = card;
+    projectDialogImage.src = image.currentSrc || image.src;
+    projectDialogImage.alt = image.alt;
+    projectDialogTitle.textContent = title.textContent;
+    projectDialogDescription.textContent = description.textContent;
+    projectDialogTags.replaceChildren(...Array.from(tags.children, (tag) => tag.cloneNode(true)));
+    projectDialogDemoMessage.hidden = true;
+    projectDialog.showModal();
+  };
+
+  document.querySelectorAll('.project-card').forEach((card) => {
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-haspopup', 'dialog');
+    card.addEventListener('click', () => openProjectDialog(card));
+    card.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      openProjectDialog(card);
+    });
+  });
+
+  projectDialog.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    projectDialog.close();
+  });
+  projectDialog.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    event.preventDefault();
+    projectDialog.close();
+  });
+  projectDialog.addEventListener('click', (event) => {
+    if (event.target === projectDialog) projectDialog.close();
+  });
+  projectDialogDemoButton.addEventListener('click', () => {
+    projectDialogDemoMessage.hidden = false;
+  });
+  projectDialogDemoMessage.querySelector('a').addEventListener('click', () => {
+    projectDialog.close();
+  });
+  projectDialog.addEventListener('close', () => {
+    activeProjectCard?.focus();
+    activeProjectCard = null;
   });
 }
 
